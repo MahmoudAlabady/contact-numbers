@@ -47,7 +47,7 @@ export class ContactFormComponent  implements OnInit{
    updateContact(values:any){
     console.log(values)
     let body =values
-    let id =this.data._id
+    let id =this.data.id
     this.contactService.updateContact(id,body).subscribe({
        next: (res:any)=>{
         
@@ -57,34 +57,25 @@ export class ContactFormComponent  implements OnInit{
          
        }
      })
+     this.dialogRef.close();
    }
    fillEditFormWithData() {
-    console.log(this.data)
-    this.filtersForm.get('notes')?.setValue(this.data.notes);
-    this.filtersForm.get('address')?.setValue(this.data.address);
-    this.filtersForm.get('phone')?.setValue(this.data.phone);
-
-    this.filtersForm.get('name')?.setValue(this.data.name);
+    // console.log(contact)
+    if(this.data.edit){
+      const contact = this.data.contacts.find((c: { _id: any; }) => c._id === this.data.id);
+      console.log(contact)
+  
+      this.filtersForm.get('notes')?.setValue(contact.notes);
+      this.filtersForm.get('address')?.setValue(contact.address);
+      this.filtersForm.get('phone')?.setValue(contact.phone);
+  
+      this.filtersForm.get('name')?.setValue(contact.name);
+    }
+    
     
 
 
   }
-  // saveContact() {
-  //   if (this.contactService.getEditMode()) {
-  //     this.contactService.updateContact(this.contact._id, this.contact).subscribe(() => {
-  //       this.contactService.setCurrentContact(null);
-  //       this.contactService.setEditMode(false);
-  //     });} else {
-  //       this.contactService.addContact(this.contact).subscribe(() => {
-  //       this.contactService.setCurrentContact(null);
-  //       this.contactService.setEditMode(false);
-  //       });
-  //       }
-  //       }
-        
-        // cancel() {
-        // this.contactService.setCurrentContact(null);
-        // this.contactService.setEditMode(false);
-        // }
+  
         
 }

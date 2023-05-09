@@ -1,7 +1,7 @@
 <h1>{{ mode }} Contact</h1>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
   <div class="bg-white p-4 rounded-lg shadow-md">
-    <form [formGroup]="filtersForm" (ngSubmit)="saveContact(filtersForm.value);">
+    <form [formGroup]="filtersForm" (ngSubmit)="saveContact(filtersForm.value);" *ngIf="!this.data.edit">
       <div class="flex mb-2">
         <label class="mr-2">Name:</label>
         <input type="text" class="rounded-lg border-gray-300" formControlName="name">
@@ -19,6 +19,26 @@
         <input type="text" class="rounded-lg border-gray-300" formControlName="notes">
       </div>
       <button class="px-4 py-2 bg-green-500 text-white rounded-lg mt-4" type="submit">Add Contact</button>
+
+    </form>
+    <form [formGroup]="filtersForm" (ngSubmit)="updateContact(filtersForm.value);" *ngIf="this.data.edit">
+      <div class="flex mb-2">
+        <label class="mr-2">Name:</label>
+        <input type="text" class="rounded-lg border-gray-300" formControlName="name">
+      </div>
+      <div class="flex mb-2">
+        <label class="mr-2">Phone:</label>
+        <input type="text" class="rounded-lg border-gray-300" formControlName="phone">
+      </div>
+      <div class="flex mb-2">
+        <label class="mr-2">Address:</label>
+        <input type="text" class="rounded-lg border-gray-300" formControlName="address">
+      </div>
+      <div class="flex mb-2">
+        <label class="mr-2">Notes:</label>
+        <input type="text" class="rounded-lg border-gray-300" formControlName="notes">
+      </div>
+      <button class="px-4 py-2 bg-green-500 text-white rounded-lg mt-4" type="submit">Edit Contact</button>
 
     </form>
   </div>

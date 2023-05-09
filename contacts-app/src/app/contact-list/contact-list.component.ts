@@ -4,6 +4,7 @@ import { ContactService } from '../contact.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ContactFormComponent } from '../contact-form/contact-form.component';
+import { DeleteConfirmtionComponent } from '../delete-confirmtion/delete-confirmtion.component';
 
 @Component({
   selector: 'app-contact-list',
@@ -77,8 +78,8 @@ createForm(){
     });
 
     this.dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-      }
+      this.getContacts()
+     
     });
   }
   // addContact() {
@@ -86,22 +87,30 @@ createForm(){
   //   // this.contactService.setEditMode(false);
   // }
 
-  editContact(contact: any) {
+  editContact(id: any) {
     this.dialogRef = this.dialog.open(ContactFormComponent, {
       width: '369px',
       height: '159px',
-      data: this.contacts
+      data: {edit:'edit',id,contacts:this.contacts}
     });
 
     this.dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-      }
+      this.getContacts()
+     
     });
   }
 
   deleteContact(id: string) {
-    this.contactService.deleteContact(id).subscribe((res: any) => {
-      this.getContacts()
+    this.dialogRef = this.dialog.open(DeleteConfirmtionComponent, {
+      width: '369px',
+      height: '159px',
+      data: id
     });
+
+    this.dialogRef.afterClosed().subscribe((result: any) => {
+      this.getContacts()
+     
+    });
+  
   }
 }
