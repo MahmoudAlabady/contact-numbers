@@ -12,5 +12,15 @@ export class ContactService {
     return this.http.get(this.url,{ params });
 
   }
+  
+  addContact(body: any){
+    return this.http.post(this.url,body)
+  }
+  updateContact(id:any,data:any){
+    return this.http.put(this.url+id,data)
+  }
+  deleteContact(id:string){
+    return this.http.delete(this.url+id)
 
+  }
 }

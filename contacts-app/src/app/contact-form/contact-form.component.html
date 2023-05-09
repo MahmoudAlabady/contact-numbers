@@ -1,21 +1,25 @@
 <h1>{{ mode }} Contact</h1>
-<form (ngSubmit)="saveContact()">
-  <div>
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" [(ngModel)]="contact.name">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div class="bg-white p-4 rounded-lg shadow-md">
+    <form [formGroup]="filtersForm" (ngSubmit)="saveContact(filtersForm.value);">
+      <div class="flex mb-2">
+        <label class="mr-2">Name:</label>
+        <input type="text" class="rounded-lg border-gray-300" formControlName="name">
+      </div>
+      <div class="flex mb-2">
+        <label class="mr-2">Phone:</label>
+        <input type="text" class="rounded-lg border-gray-300" formControlName="phone">
+      </div>
+      <div class="flex mb-2">
+        <label class="mr-2">Address:</label>
+        <input type="text" class="rounded-lg border-gray-300" formControlName="address">
+      </div>
+      <div class="flex mb-2">
+        <label class="mr-2">Notes:</label>
+        <input type="text" class="rounded-lg border-gray-300" formControlName="notes">
+      </div>
+      <button class="px-4 py-2 bg-green-500 text-white rounded-lg mt-4" type="submit">Add Contact</button>
+
+    </form>
   </div>
-  <div>
-    <label for="phone">Phone:</label>
-    <input type="text" id="phone" name="phone" [(ngModel)]="contact.phone">
-  </div>
-  <div>
-    <label for="address">Address:</label>
-    <input type="text" id="address" name="address" [(ngModel)]="contact.address">
-  </div>
-  <div>
-    <label for="notes">Notes:</label>
-    <textarea id="notes" name="notes" [(ngModel)]="contact.notes"></textarea>
-  </div>
-  <button type="submit">{{ mode }}</button>
-  <button type="button" (click)="cancel()">Cancel</button>
-</form>
+</div>

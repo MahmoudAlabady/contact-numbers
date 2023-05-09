@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContactService } from '../contact.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ContactFormComponent } from '../contact-form/contact-form.component';
 
 @Component({
   selector: 'app-contact-list',
@@ -12,6 +14,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 })
 export class ContactListComponent implements OnInit{
   filtersForm!: FormGroup;
+  dialogRef!: MatDialogRef<any>;
 
   contacts: any[] = [];
   page = 1;
@@ -23,27 +26,36 @@ export class ContactListComponent implements OnInit{
     phone: '',
     address: '',
   };
-  constructor(private contactService: ContactService,private formBuilder: FormBuilder) {}
+  constructor(private contactService: ContactService,private formBuilder: FormBuilder,private dialog: MatDialog) {}
 
   ngOnInit() {
-    this.filtersForm = this.formBuilder.group({
-      name: [''],
-      phone: [''],
-      address: [''],
-      notes: ['']
-    });
+    this.createForm();
+
     this.getContacts();
   }
+ 
+
+createForm(){
+  this.filtersForm = this.formBuilder.group({
+    name: [''],
+    phone: [''],
+    address: [''],
+    notes: ['']
+  });
+  this.filtersForm.valueChanges.subscribe(() => {
+    this.getContacts();
+  });
+}
+
 
   getContacts() {
     const params = {
       page: this.page.toString(),
-      name: this.filters.name,
-      phone: this.filters.phone,
-      address: this.filters.address,
+      name: this.filtersForm.get('name')!.value,
+      phone: this.filtersForm.get('phone')!.value,
+      address: this.filtersForm.get('address')!.value,
     };
     this.contactService.getContacts(params).subscribe((res: any) => {
-      console.log(res)
       this.contacts = res.contacts;
 
       this.totalContacts =res.count
@@ -56,21 +68,40 @@ export class ContactListComponent implements OnInit{
     }
     
   }
+
   addContact() {
-    // this.contactService.setCurrentContact(null);
-    // this.contactService.setEditMode(false);
+    this.dialogRef = this.dialog.open(ContactFormComponent, {
+      width: '369px',
+      height: '159px',
+      data: 'Do you want to add new contact?'
+    });
+
+    this.dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+      }
+    });
   }
+  // addContact() {
+  //   // this.contactService.setCurrentContact(null);
+  //   // this.contactService.setEditMode(false);
+  // }
 
   editContact(contact: any) {
-    // this.contactService.setCurrentContact(contact);
-    // this.contactService.setEditMode(true);
+    this.dialogRef = this.dialog.open(ContactFormComponent, {
+      width: '369px',
+      height: '159px',
+      data: this.contacts
+    });
+
+    this.dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+      }
+    });
   }
 
-  deleteContact(contact: any) {
-    // if (confirm('Are you sure you want to delete this contact?')) {
-    //   this.contactService.deleteContact(contact._id).subscribe(() => {
-    //     this.getContacts();
-    //   });
-    // }
+  deleteContact(id: string) {
+    this.contactService.deleteContact(id).subscribe((res: any) => {
+      this.getContacts()
+    });
   }
 }
